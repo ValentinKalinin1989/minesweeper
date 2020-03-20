@@ -10,5 +10,9 @@ public enum MineStatus {
     SIX,
     SEVEN,
     EIGHT,
-    BOMB
+    BOMB,
+    OPENED_BOMB;
+    public MineStatus nextCountBomb() {
+        return MineStatus.values()[this.ordinal() + 1];
+    }
 }
