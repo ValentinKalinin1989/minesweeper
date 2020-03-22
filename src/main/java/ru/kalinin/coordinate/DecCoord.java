@@ -2,11 +2,14 @@ package ru.kalinin.coordinate;
 
 import java.util.Objects;
 
-public class DecCoord extends Coordinate {
+/**
+ * класс для хранения декарптовых координат
+ */
+public class DecCoord {
     private int x;
     private int y;
 
-    public DecCoord (int theX, int theY) {
+    public DecCoord(int theX, int theY) {
         x = theX;
         y = theY;
     }

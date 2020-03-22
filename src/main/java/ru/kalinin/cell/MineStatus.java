@@ -1,5 +1,9 @@
 package ru.kalinin.cell;
 
+/**
+ * значения наличия мины в ячейки
+ * и числа мин в смежных ячейках
+ */
 public enum MineStatus {
     ZERO,
     ONE,
@@ -12,6 +16,7 @@ public enum MineStatus {
     EIGHT,
     BOMB,
     OPENED_BOMB;
+
     public MineStatus nextCountBomb() {
         return MineStatus.values()[this.ordinal() + 1];
     }

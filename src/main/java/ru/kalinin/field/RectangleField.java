@@ -1,23 +1,42 @@
 package ru.kalinin.field;
 
-import ru.kalinin.cell.Cell;
 import ru.kalinin.cell.MarkStatus;
 import ru.kalinin.cell.MineStatus;
 import ru.kalinin.cell.RectangleCell;
-import ru.kalinin.coordinate.Coordinate;
 import ru.kalinin.coordinate.DecCoord;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * класс реализующий прямоугольное игровое поле
+ */
 public class RectangleField implements Field {
 
-    private List<Cell> field;
+    /**
+     * список ячеек игрового поля
+     */
+    private List<RectangleCell> field;
+    /**
+     * число открытых мин
+     */
     private int openedMines;
+    /**
+     * число всех мин
+     */
     private int allMines;
+    /**
+     * число открытых ячеек
+     */
     private int openedCells;
+    /**
+     * длина поля (размер поля по оси Х)
+     */
     private int sizeX;
+    /**
+     * высота игрового поля (размер поля по оси У)
+     */
     private int sizeY;
 
     /**
@@ -34,12 +53,13 @@ public class RectangleField implements Field {
         openedCells = 0;
         sizeX = theSizeX;
         sizeY = theSizeY;
-        field = new ArrayList<>(sizeX*sizeY);
-        for (int y = 0; y < theSizeX; y++) {
-            for (int x = 0; x < theSizeY; x++) {
-                field.add(new RectangleCell(new DecCoord(x, y)));
+        List<RectangleCell> newfield = new ArrayList<>(sizeX * sizeY);
+        for (int y = 0; y < theSizeY; y++) {
+            for (int x = 0; x < theSizeX; x++) {
+                newfield.add(new RectangleCell(new DecCoord(x, y)));
             }
         }
+        field = newfield;
         plantedMines(allMines);
     }
 
@@ -53,18 +73,18 @@ public class RectangleField implements Field {
         int numbersOfCell = sizeX * sizeY - 1;
         while (numberOfMines > 0) {
             int index = random.nextInt(numbersOfCell);
-            RectangleCell cellForBomb = (RectangleCell) field.get(index);
+            RectangleCell cellForBomb = field.get(index);
             if (cellForBomb.getMineStatus().equals(MineStatus.BOMB)) {
                 continue;
             }
             cellForBomb.setMineStatus(MineStatus.BOMB);
-            int x = index % sizeY;
-            int y = index / sizeY;
-            List<Cell> aroundCell = getCellAround(new DecCoord(x, y));
-            for (Cell cell : aroundCell) {
-                MineStatus mineStatus = ((RectangleCell) cell).getMineStatus();
+            int x = index % sizeX;
+            int y = index / sizeX;
+            List<RectangleCell> aroundCell = getCellAround(new DecCoord(x, y));
+            for (RectangleCell cell : aroundCell) {
+                MineStatus mineStatus = cell.getMineStatus();
                 if (!mineStatus.equals(MineStatus.BOMB)) {
-                    ((RectangleCell) cell).setMineStatus(mineStatus.nextCountBomb());
+                    cell.setMineStatus(mineStatus.nextCountBomb());
                 }
             }
             numberOfMines--;
@@ -77,43 +97,46 @@ public class RectangleField implements Field {
      * @param coordinate координаты ячейки для которой необходимо провести поиск
      * @return список ячеек
      */
-    public List<Cell> getCellAround(Coordinate coordinate) {
-        List<Cell> aroundCells = new ArrayList<>();
-        int x = ((DecCoord) coordinate).getX();
-        int y = ((DecCoord) coordinate).getY();
+    public List<RectangleCell> getCellAround(DecCoord coordinate) {
+        List<RectangleCell> aroundCells = new ArrayList<>();
+        int x = coordinate.getX();
+        int y = coordinate.getY();
         if (coordInField(x + 1, y)) {
-            aroundCells.add(field.get(y * 10 + x + 1));
+            aroundCells.add(field.get(y * sizeX + x + 1));
         }
         if (coordInField(x - 1, y)) {
-            aroundCells.add(field.get(y * 10 + x - 1));
+            aroundCells.add(field.get(y * sizeX + x - 1));
         }
         if (coordInField(x, y + 1)) {
-            aroundCells.add(field.get((y + 1) * 10 + x));
+            aroundCells.add(field.get((y + 1) * sizeX + x));
         }
         if (coordInField(x, y - 1)) {
-            aroundCells.add(field.get((y - 1) * 10 + x));
+            aroundCells.add(field.get((y - 1) * sizeX + x));
         }
         if (coordInField(x + 1, y + 1)) {
-            aroundCells.add(field.get((y + 1) * 10 + x + 1));
+            aroundCells.add(field.get((y + 1) * sizeX + x + 1));
         }
         if (coordInField(x + 1, y - 1)) {
-            aroundCells.add(field.get((y - 1) * 10 + x + 1));
+            aroundCells.add(field.get((y - 1) * sizeX + x + 1));
         }
         if (coordInField(x - 1, y + 1)) {
-            aroundCells.add(field.get((y + 1) * 10 + x - 1));
+            aroundCells.add(field.get((y + 1) * sizeX + x - 1));
         }
         if (coordInField(x - 1, y - 1)) {
-            aroundCells.add(field.get((y - 1) * 10 + x - 1));
+            aroundCells.add(field.get((y - 1) * sizeX + x - 1));
         }
         return aroundCells;
     }
 
     /**
+     * проверяет принадлежат ли данные координаты,
+     * созданному игровому полю
+     *
      * @param x координата  Х
      * @param y Координата У
      * @return true если есть ячейка с данными координатами
      */
-    public boolean coordInField(int x, int y) {
+    private boolean coordInField(int x, int y) {
         boolean result = false;
         if (x < sizeX && x >= 0 && y < sizeY && y >= 0) {
             result = true;
@@ -124,51 +147,43 @@ public class RectangleField implements Field {
     /**
      * открывает ячейку, если она не помечена флагом
      *
-     * @param coordinate - координаты ячейки
-     * @return - false - если открыта бомба
+     * @param decCoord - координаты ячейки
      */
     @Override
-    public boolean openCell(Coordinate coordinate) {
-        boolean isOpenFreeCell = true;
-        DecCoord decCoord = (DecCoord) coordinate;
-        RectangleCell rectangleCell = (RectangleCell) field.get(decCoord.getY() * sizeX + decCoord.getX());
+    public void openCell(DecCoord decCoord) {
+        RectangleCell rectangleCell = field.get(decCoord.getY() * sizeX + decCoord.getX());
         MarkStatus markStatus = rectangleCell.getMarkStatus();
         if (markStatus.equals(MarkStatus.MARKED) || markStatus.equals(MarkStatus.OPENED)) {
-            return isOpenFreeCell;
+            return;
         }
         rectangleCell.setMarkStatus(MarkStatus.OPENED);
         MineStatus mineStatus = rectangleCell.getMineStatus();
         if (mineStatus.equals(MineStatus.BOMB)) {
             openedMines++;
             rectangleCell.setMineStatus(MineStatus.OPENED_BOMB);
-            isOpenFreeCell = false;
         } else if (mineStatus.equals(MineStatus.ZERO)) {
-            openCellAroundIfNumbMinZero(coordinate);
+            openCellAroundIfNumbMinZero(decCoord);
         } else {
             openedCells++;
         }
         System.out.println(openedCells);
-        return isOpenFreeCell;
     }
 
     /**
      * отрытие смежных ячеек, если в них нет мин
      *
-     * @param coordinate - координаты ячейки
+     * @param decCoord - координаты ячейки
      */
-    public void openCellAroundIfNumbMinZero(Coordinate coordinate) {
-        System.out.println(openedCells);
-        DecCoord decCoord = (DecCoord) coordinate;
-        RectangleCell rectangleCell = (RectangleCell) field.get(decCoord.getY() * sizeX + decCoord.getX());
+    private void openCellAroundIfNumbMinZero(DecCoord decCoord) {
+        RectangleCell rectangleCell = field.get(decCoord.getY() * sizeX + decCoord.getX());
         openedCells++;
         rectangleCell.setMarkStatus(MarkStatus.OPENED);
         if (rectangleCell.getMineStatus().equals(MineStatus.ZERO)) {
-            List<Cell> cellList = getCellAround(coordinate);
-            for (Cell cell : cellList) {
-                RectangleCell rectCell = (RectangleCell) cell;
+            List<RectangleCell> cellList = getCellAround(decCoord);
+            for (RectangleCell rectCell : cellList) {
                 if (!rectCell.getMarkStatus().equals(MarkStatus.OPENED) && rectCell.getMineStatus().equals(MineStatus.ZERO)) {
                     openCellAroundIfNumbMinZero(rectCell.getDecCoord());
-                } else if (!rectCell.getMarkStatus().equals(MarkStatus.OPENED)){
+                } else if (!rectCell.getMarkStatus().equals(MarkStatus.OPENED)) {
                     openedCells++;
                     System.out.println(openedCells);
                 }
@@ -183,12 +198,11 @@ public class RectangleField implements Field {
      * маркировка ячейки,
      * или снятие маркировки, если ячейка помечена
      *
-     * @param coordinate - координаты ячйки
+     * @param decCoord - координаты ячйки
      */
     @Override
-    public void markedCell(Coordinate coordinate) {
-        DecCoord decCoord = (DecCoord) coordinate;
-        RectangleCell rectangleCell = (RectangleCell) field.get(decCoord.getY() * sizeX + decCoord.getX());
+    public void markedCell(DecCoord decCoord) {
+        RectangleCell rectangleCell = field.get(decCoord.getY() * sizeX + decCoord.getX());
         if (rectangleCell.getMarkStatus().equals(MarkStatus.CLOSED)) {
             rectangleCell.setMarkStatus(MarkStatus.MARKED);
         } else if (rectangleCell.getMarkStatus().equals(MarkStatus.MARKED)) {
@@ -197,7 +211,7 @@ public class RectangleField implements Field {
     }
 
     @Override
-    public List<Cell> getField() {
+    public List<RectangleCell> getField() {
         return field;
     }
 

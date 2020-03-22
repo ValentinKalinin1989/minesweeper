@@ -2,7 +2,10 @@ package ru.kalinin.cell;
 
 import ru.kalinin.coordinate.DecCoord;
 
-public class RectangleCell extends Cell {
+/**
+ * используется для хранения ячейки игрового поля
+ */
+public class RectangleCell {
     private MarkStatus markStatus;
     private MineStatus mineStatus;
     private DecCoord decCoord;
@@ -32,4 +35,5 @@ public class RectangleCell extends Cell {
     public DecCoord getDecCoord() {
         return decCoord;
     }
+
 }

@@ -1,7 +1,6 @@
 package ru.kalinin.rules;
 
 import ru.kalinin.field.Field;
-import ru.kalinin.logic.GameStatus;
 
 public class LoseIfOpenBomb implements RulesOfGame {
     @Override

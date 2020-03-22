@@ -1,17 +1,27 @@
 package ru.kalinin.field;
 
-import ru.kalinin.cell.Cell;
-import ru.kalinin.coordinate.Coordinate;
+import ru.kalinin.cell.RectangleCell;
+import ru.kalinin.coordinate.DecCoord;
 
 import java.util.List;
 
+/**
+ * интерфейс определяющий основные методы игрового поля
+ */
 public interface Field {
-    boolean openCell(Coordinate coordinate);
-    void markedCell(Coordinate coordinate);
-    List<Cell> getField();
+    void openCell(DecCoord coordinate);
+
+    void markedCell(DecCoord coordinate);
+
+    List<RectangleCell> getField();
+
     void initField(int theSizeX, int theSizeY, int theAllMines);
+
     int getOpenedMines();
+
     int getAllMines();
+
     int getOpenedCells();
+
     int getNumberAllCells();
 }
