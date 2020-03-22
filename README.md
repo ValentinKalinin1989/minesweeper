@@ -7,8 +7,10 @@
 <li>нажатие на колесико мыши запускает новую игру</li>
 
 <h5>Окно игры имеет следующий вид:</h5>
+<img src="https://github.com/ValentinKalinin1989/minesweeper/blob/master/images/window.png">
 
 <h5>После завршения игры появляется диалоговое окно позволяющее запустить новую игру:</h5>
+<img src="https://github.com/ValentinKalinin1989/minesweeper/blob/master/images/dialog_box.png">
 
 <h5>Графическая часть приложения использует библиотеку Swing<h5>
 <h5>Сборка осуществляет с помощью Maven</h5>
