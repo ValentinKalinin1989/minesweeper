@@ -64,6 +64,24 @@ public class RectangleField implements Field {
     }
 
     /**
+     * метод для тестирования
+     * получает заготовленнное игровое поле с заданным расположением мин.
+     *
+     * @param theField    - заготовлениное игровое поле( изестно рамположение мин)
+     * @param theSizeX    - длина по оси Х
+     * @param theSizeY    - длина по оси У
+     * @param theAllMines - число мин
+     */
+    public void initFieldForTest(List<RectangleCell> theField, int theSizeX, int theSizeY, int theAllMines) {
+        openedMines = 0;
+        allMines = theAllMines;
+        openedCells = 0;
+        sizeX = theSizeX;
+        sizeY = theSizeY;
+        field = theField;
+    }
+
+    /**
      * расстановка мин
      *
      * @param numberOfMines - число мин
@@ -97,7 +115,7 @@ public class RectangleField implements Field {
      * @param coordinate координаты ячейки для которой необходимо провести поиск
      * @return список ячеек
      */
-    public List<RectangleCell> getCellAround(DecCoord coordinate) {
+    private List<RectangleCell> getCellAround(DecCoord coordinate) {
         List<RectangleCell> aroundCells = new ArrayList<>();
         int x = coordinate.getX();
         int y = coordinate.getY();
@@ -166,7 +184,6 @@ public class RectangleField implements Field {
         } else {
             openedCells++;
         }
-        System.out.println(openedCells);
     }
 
     /**
@@ -185,13 +202,11 @@ public class RectangleField implements Field {
                     openCellAroundIfNumbMinZero(rectCell.getDecCoord());
                 } else if (!rectCell.getMarkStatus().equals(MarkStatus.OPENED)) {
                     openedCells++;
-                    System.out.println(openedCells);
                 }
                 rectCell.setMarkStatus(MarkStatus.OPENED);
             }
             cellList.clear();
         }
-        System.out.println(openedCells);
     }
 
     /**
