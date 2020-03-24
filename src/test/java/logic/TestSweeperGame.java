@@ -1,4 +1,4 @@
-package field;
+package logic;
 
 import org.junit.Test;
 import ru.kalinin.cell.MineStatus;
