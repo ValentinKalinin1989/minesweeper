@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/ValentinKalinin1989/minesweeper.svg?branch=master)](https://travis-ci.org/ValentinKalinin1989/minesweeper)
+[![codecov](https://codecov.io/gh/ValentinKalinin1989/minesweeper/branch/master/graph/badge.svg)](https://codecov.io/gh/ValentinKalinin1989/minesweeper)
+
+
 <h1>Mines sweeper</h1>
 <h4> Аналог игры игры Cапер</h4>
 
